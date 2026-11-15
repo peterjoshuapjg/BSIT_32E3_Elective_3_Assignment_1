@@ -1,0 +1,55 @@
+﻿@using System.Text.Encodings.Web
+@using System.Text.Json
+@model ExamViewModel
+@{
+    ViewData["Title"] = Model.ExamTitle;
+
+    var jsonOptions = new JsonSerializerOptions
+    {
+        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+    };
+    var questionsJson = JsonSerializer.Serialize(Model.Questions, jsonOptions);
+}
+
+<script type="application/json" id="questions-data">@Html.Raw(questionsJson)</script>
+
+<div class="exam-shell" id="exam-shell">
+
+    <aside class="sidebar">
+        <header class="exam-header">
+            <h1>@Model.ExamTitle</h1>
+            <p class="exam-header__subtitle">IT Elective 3 &mdash; Fullstack Development</p>
+        </header>
+        <div class="progress">
+            <div class="exam-counter" id="exam-counter" aria-live="polite">Question 1 of @Model.TotalQuestions</div>
+            <div class="progress-track" aria-hidden="true">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+        </div>
+
+        <nav class="navigator" id="navigator" aria-label="Question navigator">
+            <h2 class="navigator__title">Jump to question</h2>
+            <div class="navigator__grid" id="navigator-grid"></div>
+        </nav>
+        <div class="student">
+            <strong>Galang, Peter Joshua F.</strong>
+            <span>BSIT32E3</span>
+        </div>
+    </aside>
+
+    <main class="card-area">
+        <article class="question-card" id="question-card">
+            <div class="question-card__number" id="question-number">1</div>
+            <div class="question-card__body">
+                <p class="question-card__text" id="question-text"></p>
+                <div class="choices" id="choices-container"></div>
+            </div>
+        </article>
+
+        <div class="nav-buttons">
+            <button type="button" class="btn btn--ghost" id="btn-prev">&larr; Previous</button>
+            <button type="button" class="btn btn--primary" id="btn-next">Next &rarr;</button>
+        </div>
+    </main>
+</div>
